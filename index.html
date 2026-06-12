@@ -8,28 +8,14 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#080a0f;color:#e4e7f0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:14px}
 #root{min-height:100vh}
-#err{position:fixed;top:20px;left:20px;right:20px;background:#6b1a1a;color:#fca5a5;padding:12px;border-radius:8px;font-size:12px;display:none;z-index:99999;white-space:pre-wrap;max-height:300px;overflow:auto;word-break:break-all}
 </style>
 </head>
 <body>
-<div id="err"></div>
 <div id="root"></div>
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
 <script>
-window.onerror=function(msg,src,line,col,err){
-  var d=document.getElementById('err');
-  d.style.display='block';
-  d.textContent+='ERROR: '+msg+'\n  '+src+':'+line+'\n'+(err&&err.stack||'')+'\n\n';
-};
-window.addEventListener('unhandledrejection',function(e){
-  var d=document.getElementById('err');
-  d.style.display='block';
-  d.textContent+='PROMISE: '+(e.reason&&e.reason.stack||e.reason)+'\n\n';
-});
-
 const {useState,useEffect,useCallback,useRef}=React;
-
 const TEAMS = {
   buffalo: {
     id: "buffalo",
@@ -1777,30 +1763,6 @@ function SchedulePanel({ stored, setStored, saveS: saveS2 }) {
   })))))));
 }
 
-
-class EB extends React.Component{
-  constructor(p){super(p);this.state={err:null};}
-  static getDerivedStateFromError(e){return{err:e};}
-  componentDidCatch(e,i){
-    var d=document.getElementById('err');
-    d.style.display='block';
-    d.textContent+='REACT: '+e.message+'\n'+e.stack+'\n\n';
-  }
-  render(){
-    if(this.state.err)return React.createElement('div',{style:{padding:20,color:'#fca5a5'}},'Crashed: '+this.state.err.message);
-    return this.props.children;
-  }
-}
-
-try{
-  ReactDOM.createRoot(document.getElementById('root')).render(
-    React.createElement(EB,null,React.createElement(App))
-  );
-}catch(e){
-  var d=document.getElementById('err');
-  d.style.display='block';
-  d.textContent='MOUNT: '+e.message+'\n'+e.stack;
-}
 </script>
 </body>
 </html>
